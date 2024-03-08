@@ -1,0 +1,84 @@
+{
+    "participants": [
+        {
+            "_id":"2022178",
+            "name":"Jose Luis White Salamanca",
+            "age": 15,
+            "gender": true,
+            "discipline": "1",
+            "mail": "jose.Salamanca@cornschool.edu.us",
+            "height": 1.70,
+            "weight": 54
+        },
+        {
+            "_id":"202244344",
+            "name":"Ahri Valentina Smith Jhonson",
+            "age": 16,
+            "gender": false,
+            "discipline": "1",
+            "mail": "ahri.fernandez@cornschool.edu.us",
+            "height": 1.50,
+            "weight": 44
+        },
+        {
+            "_id":"2021484844",
+            "name":"Will Jhin Pinkman jones",
+            "age": 19,
+            "gender": true,
+            "discipline": "2",
+            "mail": "will.pinkman@cornschool.edu.us",
+            "height": 1.90,
+            "weight": 94
+        }
+    ],
+    
+    "disciplines":[
+        {
+            "_id":"1",
+            "name": "kitting practice",
+            "description": "Practicing league of legend kitting....",
+            "inGroup": false
+        },
+        {
+            "_id":"2",
+            "name": "art class",
+            "description": "Painting practice. Paint your own stunning places....",
+            "inGroup": false
+        }
+    ],
+    
+    "events":[
+        {
+            "_id":"1",
+            "name": "Ezreal tournament",
+            "description": "...",
+            "date": "09-03-2024",
+            "discipline":"1",
+            "leadeardboard":{
+                "1": "2022178",
+                "2":"202244344"
+            }
+        },
+        {
+            "_id":"2",
+            "name": "Ezreal tournament v.2",
+            "description": "...",
+            "date": "10-05-2024",
+            "discipline":"1",
+            "leadeardboard":{
+                "2":"202244344",
+                "1": "2022178"
+            }
+        },
+        {
+            "_id":"3",
+            "name": "Farm Painting",
+            "description": "...",
+            "date": "20-03-2024",
+            "discipline":"2",
+            "leadeardboard":{
+                "1": "2021484844"
+            }
+        }
+    ]
+}
