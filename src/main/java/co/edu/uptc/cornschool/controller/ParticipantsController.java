@@ -2,10 +2,12 @@ package co.edu.uptc.cornschool.controller;
 
 import co.edu.uptc.cornschool.model.Discipline;
 import co.edu.uptc.cornschool.model.Participant;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.result.UpdateResult;
 import com.mysql.cj.xdevapi.JsonArray;
 import org.bson.Document;
 
@@ -43,6 +45,40 @@ public class ParticipantsController {
 
         } catch (Exception e) {
             return null;
+        }
+    }
+    public boolean addParticipant(String id, String name, int age, boolean gender, double weight, double height, Discipline discipline){
+        try (MongoClient mongoClient = MongoClients.create(uri)) {
+            MongoDatabase database = mongoClient.getDatabase("collegue");
+            MongoCollection<Document> collection = database.getCollection("participants");
+
+            Document participantDoc = new Document("_id", id)
+                    .append("name", name)
+                    .append("age", age)
+                    .append("gender", gender)
+                    .append("weight", weight)
+                    .append("height", height)
+                    .append("discipline", discipline.getId());
+            collection.insertOne(participantDoc);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean editParticipant(String id, String attribute, String newValue){
+        try (MongoClient mongoClient = MongoClients.create(uri)) {
+            MongoDatabase database = mongoClient.getDatabase("collegue");
+            MongoCollection<Document> collection = database.getCollection("participants");
+
+            BasicDBObject searchQuery = new BasicDBObject().append("_id", id);
+            BasicDBObject updateQuery = new BasicDBObject().append("$set", new BasicDBObject(attribute, newValue));
+
+            UpdateResult result = collection.updateOne(searchQuery, updateQuery);
+            return result.getModifiedCount() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
