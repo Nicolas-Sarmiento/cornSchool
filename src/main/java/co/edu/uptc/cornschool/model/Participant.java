@@ -6,12 +6,12 @@ public class Participant {
     private Integer age;
     private Boolean gender;
     private String mail;
-    private Float weight;
-    private Float height;
+    private double weight;
+    private double height;
 
     private Discipline discipline;
 
-    public Participant(String id, String name, Integer age, Boolean gender, String mail, Float weight, Float height, Discipline discipline) {
+    public Participant(String id, String name, Integer age, Boolean gender, String mail, double weight, double height, Discipline discipline) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -70,19 +70,19 @@ public class Participant {
         this.mail = mail;
     }
 
-    public Float getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(Float weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
-    public Float getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(Float height) {
+    public void setHeight(double height) {
         this.height = height;
     }
 }
