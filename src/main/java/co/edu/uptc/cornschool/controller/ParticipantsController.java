@@ -7,6 +7,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.mysql.cj.xdevapi.JsonArray;
 import org.bson.Document;
@@ -77,7 +78,20 @@ public class ParticipantsController {
             UpdateResult result = collection.updateOne(searchQuery, updateQuery);
             return result.getModifiedCount() > 0;
         } catch (Exception e) {
-            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteParticipant(String id){
+        try (MongoClient mongoClient = MongoClients.create(uri)) {
+            MongoDatabase database = mongoClient.getDatabase("collegue");
+            MongoCollection<Document> collection = database.getCollection("participants");
+
+            BasicDBObject query = new BasicDBObject("_id", id);
+            DeleteResult result = collection.deleteOne(query);
+
+            return result.getDeletedCount() > 0;
+        } catch (Exception e) {
             return false;
         }
     }
