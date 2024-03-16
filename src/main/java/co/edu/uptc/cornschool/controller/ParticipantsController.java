@@ -13,6 +13,7 @@ import com.mysql.cj.xdevapi.JsonArray;
 import org.bson.Document;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -48,19 +49,33 @@ public class ParticipantsController {
             return null;
         }
     }
+    public boolean validCharacters( String name ) {
+        String regex = "^[a-zA-Z\\s]+$";
+        return Pattern.matches(regex, name);
+    }
+    public boolean validNumbers( String id ){
+        String regex = "^[0-9]+$";
+        return Pattern.matches(regex, id);
+    }
+
     public boolean addParticipant(String id, String name, int age, boolean gender, double weight, double height, Discipline discipline){
         try (MongoClient mongoClient = MongoClients.create(uri)) {
             MongoDatabase database = mongoClient.getDatabase("collegue");
             MongoCollection<Document> collection = database.getCollection("participants");
 
-            Document participantDoc = new Document("_id", id)
+            if( !validCharacters(name) ) return false;
+            if( name.trim().isEmpty() ) return false;
+            if( !validNumbers(id) ) return false;
+            if( id.trim().isEmpty() ) return false;
+
+            Document participant = new Document("_id", id)
                     .append("name", name)
                     .append("age", age)
                     .append("gender", gender)
                     .append("weight", weight)
                     .append("height", height)
                     .append("discipline", discipline.getId());
-            collection.insertOne(participantDoc);
+            collection.insertOne(participant);
             return true;
         } catch (Exception e) {
             return false;
@@ -73,7 +88,36 @@ public class ParticipantsController {
             MongoCollection<Document> collection = database.getCollection("participants");
 
             BasicDBObject searchQuery = new BasicDBObject().append("_id", id);
-            BasicDBObject updateQuery = new BasicDBObject().append("$set", new BasicDBObject(attribute, newValue));
+            BasicDBObject updateQuery = new BasicDBObject();
+
+
+            if (attribute.equals("name")) {
+                if (!validCharacters(newValue) || newValue.trim().isEmpty()) return false;
+                updateQuery = new BasicDBObject("$set", new BasicDBObject(attribute, newValue));
+            }
+
+            if (attribute.equals("_id")) {
+                if (!validNumbers(newValue) || newValue.trim().isEmpty()) return false;
+                updateQuery = new BasicDBObject("$set", new BasicDBObject(attribute, newValue));
+            }
+
+            if (attribute.equals("age")) {
+                try {
+                    int value = Integer.parseInt(newValue);
+                    updateQuery = new BasicDBObject("$set", new BasicDBObject(attribute, value));
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+            }
+
+            if (attribute.equals("weight") || attribute.equals("height")) {
+                try {
+                    double value = Double.parseDouble(newValue);
+                    updateQuery = new BasicDBObject("$set", new BasicDBObject(attribute, value));
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+            }
 
             UpdateResult result = collection.updateOne(searchQuery, updateQuery);
             return result.getModifiedCount() > 0;
@@ -87,10 +131,14 @@ public class ParticipantsController {
             MongoDatabase database = mongoClient.getDatabase("collegue");
             MongoCollection<Document> collection = database.getCollection("participants");
 
+            if( !validNumbers(id) ) return false;
+            if( id.trim().isEmpty() ) return false;
+            if( this.findById( id ) == null ) return false;
+
             BasicDBObject query = new BasicDBObject("_id", id);
             DeleteResult result = collection.deleteOne(query);
 
-            return result.getDeletedCount() > 0;
+            return true;
         } catch (Exception e) {
             return false;
         }
@@ -100,6 +148,9 @@ public class ParticipantsController {
         try (MongoClient mongoClient = MongoClients.create(uri)) {
             MongoDatabase database = mongoClient.getDatabase("collegue");
             MongoCollection<Document> collection = database.getCollection("participants");
+
+            if( !validNumbers(idFind) ) return null;
+            if( idFind.trim().isEmpty() ) return null;
 
             for (Document doc : collection.find()) {
                 String id = doc.getString("_id");
