@@ -2,6 +2,7 @@ package co.edu.uptc.cornschool.controller;
 
 import co.edu.uptc.cornschool.model.Discipline;
 import co.edu.uptc.cornschool.model.Participant;
+import co.edu.uptc.cornschool.persistence.DisciplineDAO;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -19,8 +20,9 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class ParticipantsController {
 
-    String uri = "<mongodb+srv://amongus4:amongus4 @conrschool.evfn33h.mongodb.net/?retryWrites=true&w=majority&appName=ConrSchool>";
-
+    //String uri = "<mongodb+srv://amongus4:amongus4 @conrschool.evfn33h.mongodb.net/?retryWrites=true&w=majority&appName=ConrSchool>";
+    //String uri = "mongodb+srv://amongus4:mongus444@conrschool.evfn33h.mongodb.net/?retryWrites=true&w=majority&appName=ConrSchool";
+    private static final String uri = "mongodb://localhost:27017";
     public ArrayList<Participant> readParticipants() {
         ArrayList<Participant> participants = new ArrayList<>();
         try (MongoClient mongoClient = MongoClients.create(uri)) {
@@ -37,7 +39,8 @@ public class ParticipantsController {
                 double height = doc.getDouble("height");
                 double weight = doc.getDouble("weight");
 
-                Discipline discipline1 = new Discipline("","","",false);
+                DisciplineDAO dao = new DisciplineDAO();
+                Discipline discipline1 = dao.findById(discipline);
 
                 Participant participant = new Participant(id,name,age,gender,mail,weight,height,discipline1);
 
@@ -160,10 +163,11 @@ public class ParticipantsController {
                     boolean gender = doc.getBoolean("gender");
                     String discipline = doc.getString("discipline");
                     String mail = doc.getString("mail");
-                    double height = doc.getDouble("height");
-                    double weight = doc.getDouble("weight");
+                    Double height = doc.getDouble("height");
+                    Double weight = doc.getDouble("weight");
 
-                    Discipline discipline1 = new Discipline("","","",false);
+                    DisciplineDAO dao = new DisciplineDAO();
+                    Discipline discipline1 = dao.findById(discipline);
 
                     return new Participant(id,name,age,gender,mail,weight,height,discipline1);
                 }
