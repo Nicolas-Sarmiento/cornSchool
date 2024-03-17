@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-    refreshTable()
-    chargeDisciplines()
+    refreshTable();
+    chargeDisciplines();
 });
 
 function refreshTable() {
@@ -38,7 +38,13 @@ function refreshTable() {
                         buttonDelete.setAttribute("class", "btn btn-primary");
                         buttonDelete.setAttribute("data-bs-toggle", "modal");
                         buttonDelete.setAttribute("data-bs-target", "#deleteModal");
+                        buttonDelete.setAttribute("data-participant-id", participant.id);
                         buttonDelete.textContent = "Delete";
+
+                        buttonDelete.addEventListener("click", function() {
+                            const participantId = this.getAttribute("data-participant-id");
+                            openDeleteModal(participantId);
+                        });
 
                         cell.appendChild(buttonUpdate);
                         cell.appendChild(buttonDelete);
@@ -106,7 +112,6 @@ document.querySelector("#addButton").addEventListener("click", () => {
     const height = document.querySelector("#heightAdd").value;
     const discipline = document.querySelector("#disciplineSelectadd").value;
 
-
     const data = {
         id: id,
         name: name,
@@ -155,5 +160,41 @@ document.querySelector("#addButton").addEventListener("click", () => {
 })
 
 document.querySelector("#deleteParticipant").addEventListener("click", () => {
+    const participantId = document.querySelector("#deleteParticipantId").value;
+    const data = {
+        id: participantId
+    };
 
-})
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:8080/cornSchool_war_exploded/DeleteParticipant", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    alert("Participant deleted successfully.");
+                    refreshTable();
+
+                    const modal = document.getElementById('deleteModal');
+                    const bootstrapModal = bootstrap.Modal.getInstance(modal);
+                    bootstrapModal.hide();
+                } else {
+                    alert("Failed to delete participant.");
+                }
+            } else {
+                alert("Error: " + xhr.status);
+            }
+        }
+    };
+
+    xhr.send(JSON.stringify(data));
+});
+
+function openDeleteModal(participantId) {
+    document.querySelector("#deleteParticipantId").value = participantId;
+    const modal = document.getElementById('deleteModal');
+    const bootstrapModal = bootstrap.Modal.getInstance(modal);
+    bootstrapModal.show();
+}
