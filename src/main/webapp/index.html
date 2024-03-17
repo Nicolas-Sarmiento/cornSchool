@@ -3,8 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <title>Corn School Discipline Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
     <h1>Corn School Discipline's Platform</h1>
+    <br>
+    <h2>Participantes</h2>
+    <br>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">Añadir</button>
+
+    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addModalLabel">Add</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>id</p>
+                    <input type="number" id="idAdd">
+                    <p>name</p>
+                    <input type="text" id="nameAdd">
+                    <p>age</p>
+                    <input type="number" id="ageAdd">
+                    <p>gender</p>
+                    <select id="genderSelectadd">
+                        <option value="male">Hombre</option>
+                        <option value="female">Mujer</option>
+                    </select>
+                    <p>mail</p>
+                    <input type="text" id="mailAdd">
+                    <p>weight</p>
+                    <input type="number" id="weightAdd">
+                    <p>height</p>
+                    <input type="number" id="heightAdd">
+                    <p>Discipline</p>
+                    <select id="disciplineSelectadd">
+                        <!-- disciplines generate in javascript -->
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="addButton">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped-columns">
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">name</th>
+            <th scope="col">age</th>
+            <th scope="col">gender</th>
+            <th scope="col">discipline</th>
+            <th scope="col">mail</th>
+            <th scope="col">height</th>
+            <th scope="col">weight</th>
+            <th scope="col">eventos</th>
+            <th scope="col">update/detele</th>
+        </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Update</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>id</p>
+                    <input type="text">
+                    <p>gender</p>
+                    <select id="genderSelect">
+                        <option value="male">Hombre</option>
+                        <option value="female">Mujer</option>
+                    </select>
+                    <p>mail</p>
+                    <input type="text">
+                    <p>weight</p>
+                    <input type="number">
+                    <p>height</p>
+                    <input type="number">
+                    <p>Discipline</p>
+                    <select id="disciplineSelect">
+                        <!-- disciplines generate in javascript -->
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteModalLabel">Delete</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary", id="deleteParticipant">delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

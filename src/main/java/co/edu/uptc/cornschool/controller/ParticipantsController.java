@@ -7,10 +7,12 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.mysql.cj.xdevapi.JsonArray;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -19,9 +21,10 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class ParticipantsController {
 
-    String uri = "<mongodb+srv://amongus4:amongus4 @conrschool.evfn33h.mongodb.net/?retryWrites=true&w=majority&appName=ConrSchool>";
+    String uri = "mongodb+srv://amongus4:mongus444@conrschool.evfn33h.mongodb.net/?retryWrites=true&w=majority&appName=ConrSchool";
 
     public ArrayList<Participant> readParticipants() {
+        DisciplineController controller = new DisciplineController();
         ArrayList<Participant> participants = new ArrayList<>();
         try (MongoClient mongoClient = MongoClients.create(uri)) {
             MongoDatabase database = mongoClient.getDatabase("collegue");
@@ -37,7 +40,7 @@ public class ParticipantsController {
                 double height = doc.getDouble("height");
                 double weight = doc.getDouble("weight");
 
-                Discipline discipline1 = new Discipline("","","",false);
+                Discipline discipline1 = controller.findById(discipline);
 
                 Participant participant = new Participant(id,name,age,gender,mail,weight,height,discipline1);
 
@@ -58,21 +61,32 @@ public class ParticipantsController {
         return Pattern.matches(regex, id);
     }
 
-    public boolean addParticipant(String id, String name, int age, boolean gender, double weight, double height, Discipline discipline){
+    public boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return email.matches(emailRegex);
+    }
+
+    public boolean addParticipant(String id, String name, int age, boolean gender, String mail,double weight, double height, Discipline discipline){
         try (MongoClient mongoClient = MongoClients.create(uri)) {
             MongoDatabase database = mongoClient.getDatabase("collegue");
             MongoCollection<Document> collection = database.getCollection("participants");
 
+            if (collection.countDocuments(Filters.eq("_id", id)) != 0) {
+                return false;
+            }
             if( !validCharacters(name) ) return false;
             if( name.trim().isEmpty() ) return false;
             if( !validNumbers(id) ) return false;
             if( id.trim().isEmpty() ) return false;
+            if (!isValidEmail(mail)) return false;
+
 
             Document participant = new Document("_id", id)
                     .append("name", name)
                     .append("age", age)
                     .append("gender", gender)
                     .append("weight", weight)
+                    .append("mail",mail)
                     .append("height", height)
                     .append("discipline", discipline.getId());
             collection.insertOne(participant);
@@ -82,44 +96,29 @@ public class ParticipantsController {
         }
     }
 
-    public boolean editParticipant(String id, String attribute, String newValue){
+    public boolean editParticipant(String id, String name, int age, boolean gender, String mail,double weight, double height, Discipline discipline){
         try (MongoClient mongoClient = MongoClients.create(uri)) {
             MongoDatabase database = mongoClient.getDatabase("collegue");
             MongoCollection<Document> collection = database.getCollection("participants");
 
-            BasicDBObject searchQuery = new BasicDBObject().append("_id", id);
-            BasicDBObject updateQuery = new BasicDBObject();
+            if (!validNumbers(id)) return false;
+            if (id.trim().isEmpty()) return false;
+            if (findById(id) == null) return false;
+            if (!isValidEmail(mail)) return false;
 
+            Bson filter = Filters.eq("_id", id);
 
-            if (attribute.equals("name")) {
-                if (!validCharacters(newValue) || newValue.trim().isEmpty()) return false;
-                updateQuery = new BasicDBObject("$set", new BasicDBObject(attribute, newValue));
-            }
+            Document updateDocument = new Document("$set", new Document("name", name)
+                    .append("name", name)
+                    .append("age", age)
+                    .append("gender", gender)
+                    .append("weight", weight)
+                    .append("mail",mail)
+                    .append("height", height)
+                    .append("discipline", discipline.getId()));
 
-            if (attribute.equals("_id")) {
-                if (!validNumbers(newValue) || newValue.trim().isEmpty()) return false;
-                updateQuery = new BasicDBObject("$set", new BasicDBObject(attribute, newValue));
-            }
+            UpdateResult result = collection.updateOne(filter, updateDocument);
 
-            if (attribute.equals("age")) {
-                try {
-                    int value = Integer.parseInt(newValue);
-                    updateQuery = new BasicDBObject("$set", new BasicDBObject(attribute, value));
-                } catch (NumberFormatException e) {
-                    return false;
-                }
-            }
-
-            if (attribute.equals("weight") || attribute.equals("height")) {
-                try {
-                    double value = Double.parseDouble(newValue);
-                    updateQuery = new BasicDBObject("$set", new BasicDBObject(attribute, value));
-                } catch (NumberFormatException e) {
-                    return false;
-                }
-            }
-
-            UpdateResult result = collection.updateOne(searchQuery, updateQuery);
             return result.getModifiedCount() > 0;
         } catch (Exception e) {
             return false;
