@@ -9,21 +9,15 @@ public class Event {
     private String name;
     private String description;
     private Date date;
-    private HashMap<Integer, Participant> leaderboard;
+    private Discipline discipline;
+    private HashMap<Participant, Integer> leaderboard;
 
-    public Event(String id, String name, String description, Date date) {
+    public Event(String id, String name, String description, Date date, Discipline discipline, HashMap<Participant, Integer> leaderboard) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.date = date;
-        this.leaderboard = new HashMap<>();
-    }
-
-    public Event(String id, String name, String description, Date date, HashMap<Integer, Participant> leaderboard) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.date = date;
+        this.discipline = discipline;
         this.leaderboard = leaderboard;
     }
 
@@ -59,11 +53,31 @@ public class Event {
         this.date = date;
     }
 
-    public HashMap<Integer, Participant> getLeaderboard() {
+    public Discipline getDiscipline() {
+        return discipline;
+    }
+
+    public void setDiscipline(Discipline discipline) {
+        this.discipline = discipline;
+    }
+
+    public HashMap<Participant, Integer> getLeaderboard() {
         return leaderboard;
     }
 
-    public void setLeaderboard(HashMap<Integer, Participant> leaderboard) {
+    public void setLeaderboard(HashMap<Participant, Integer> leaderboard) {
         this.leaderboard = leaderboard;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", date=" + date +
+                ", discipline=" + discipline +
+                ", leaderboard=" + leaderboard +
+                '}';
     }
 }

@@ -18,9 +18,11 @@ import java.util.ArrayList;
 
 public class DisciplineDAO {
 
-    private static final String URL ="mongodb+srv://amongus4:mongus444@conrschool.evfn33h.mongodb.net/?retryWrites=true&w=majority&appName=ConrSchool";
+    //private static final String URL ="mongodb+srv://amongus4:mongus444@conrschool.evfn33h.mongodb.net/?retryWrites=true&w=majority&appName=ConrSchool";
+    private static final String URL = "mongodb://localhost:27017";
     private static final String DB = "collegue";
     private static final String COLLECTION = "disciplines";
+    private MongoClient mongoClient;
     public DisciplineDAO() {
     }
 
@@ -51,7 +53,7 @@ public class DisciplineDAO {
             ArrayList<Discipline> disciplines = new ArrayList<>();
             try {
                 while (docs.hasNext()){
-                    disciplines.add(this.parseJson(docs.next()));
+                    disciplines.add(this.docToObject(docs.next()));
                 }
             }finally {
                 docs.close();
@@ -62,7 +64,7 @@ public class DisciplineDAO {
         }
     }
 
-    private Discipline parseJson( Document doc ){
+    private Discipline docToObject(Document doc ){
         String id = doc.getString("_id");
         String name = doc.getString("name");
         String description = doc.getString("description");
@@ -111,7 +113,7 @@ public class DisciplineDAO {
             MongoCollection<Document> collection = database.getCollection(COLLECTION);
             Document doc = collection.find(eq("_id", id)).first();
             if ( doc != null ){
-                return this.parseJson(doc);
+                return this.docToObject(doc);
             }else {
                 return null;
             }

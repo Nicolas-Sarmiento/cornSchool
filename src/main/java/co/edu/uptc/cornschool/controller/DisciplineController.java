@@ -56,7 +56,7 @@ public class DisciplineController {
     }
 
     public String delete( String id ){
-        if ( !validNumbers(id) )return "El id no es válido ( Solo números )";
+        if ( !validNumbers(id) ) return "El id no es válido ( Solo números )";
         if ( dao.findById(id) == null ) return "Disciplina no existente";
 
         return dao.delete(id) ? "Disciplina eliminada exitosamente" : "Algo salió mal. Intentalo más tarde";
