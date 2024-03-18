@@ -131,14 +131,90 @@
 
     <h2>Disciplines</h2>
     <br>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">New discipline</button>
-    <div class="container'-fluid" id="main">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDisciplineModal">New discipline</button>
+    <div class="container'-fluid" id="main"></div>
 
 
+
+
+    <div class="modal fade" id="addDisciplineModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addDisciplineModalLabel">Add</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>id</p>
+                    <input type="number" id="idDisciplineAdd">
+                    <p>name</p>
+                    <input type="text" id="nameDisciplineAdd">
+                    <p>Description</p>
+                    <input type="text" id="descriptionDisciplineAdd">
+                    <p>InGroup</p>
+                    <select id="inGroupDisciplineAdd">
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="addDisciplineButton">Save changes</button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class="modal fade" id="updateDisciplinesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="updateDisciplinesModalLabel">Update</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>id</p>
+                    <input type="number" id="idDisciplineEdit">
+                    <p>name</p>
+                    <input type="text" id="nameDisciplineEdit">
+                    <p>Description</p>
+                    <input type="text" id="descriptionDisciplineEdit">
+                    <p>InGroup</p>
+                    <select id="inGroupDisciplineEdit">
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="editDisciplinesButton">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteDescriptionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteDescriptionModalLabel">Delete</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="deleteDisciplineButton">delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="deleteDisciplineId">
 
     <script src="./js/disciplines.js"></script>
     <script src="./js/main.js"></script>
+
     <script src="./js/events.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

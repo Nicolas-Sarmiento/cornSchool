@@ -40,7 +40,13 @@ const renderDiscipline = (id, name, description, inGroup, participants) => {
 
     buttonAdd.appendChild(document.createTextNode("Add Participant"));
 
-    //Add event listeners to add,edit and delete
+    buttonEdit.addEventListener("click", () => {
+        openEditDisciplineModal(id, name, description, inGroup);
+    });
+
+    buttonDelete.addEventListener("click", () => {
+        openDeleteDisciplineModal(id)
+    })
 
     const code = document.createElement("p");
     code.appendChild(document.createTextNode(`code: ${id}`));
@@ -119,6 +125,143 @@ const renderParticipants = ( participants ) => {
 
     return table;
 }
+
+document.querySelector("#addDisciplineButton").addEventListener("click", () => {
+
+    const id = document.querySelector("#idDisciplineAdd").value;
+    const name = document.querySelector("#nameDisciplineAdd").value;
+    const description = document.querySelector("#descriptionDisciplineAdd").value;
+    const inGroup = document.querySelector("#inGroupDisciplineAdd").value === "true";
+
+    const data = {
+        id: id,
+        name: name,
+        description: description,
+        inGroup: inGroup
+    };
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:8080/cornSchool_war_exploded/AddDiscipline", true);
+
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    alert("Discipline added successfully.");
+                    renderDiscipline()
+
+                    const modal = document.getElementById('addDisciplineModal');
+                    const bootstrapModal = bootstrap.Modal.getInstance(modal);
+                    bootstrapModal.hide();
+
+                    document.querySelector("#idDisciplineAdd").value = "";
+                    document.querySelector("#nameDisciplineAdd").value = "";
+                    document.querySelector("#descriptionDisciplineAdd").value = "";
+                    document.querySelector("#inGroupDisciplineAdd").value = "";
+                } else {
+                    alert(response.message);
+                }
+            } else {
+                alert("Error adding Discipline.");
+            }
+        }
+    };
+
+    xhr.send(JSON.stringify(data));
+})
+
+const openEditDisciplineModal = (id, name, description, inGroup) => {
+    const modal = document.getElementById('updateDisciplinesModal').cloneNode(true);
+
+
+    modal.querySelector("#idDisciplineEdit").value = id;
+    modal.querySelector("#nameDisciplineEdit").value = name;
+    modal.querySelector("#descriptionDisciplineEdit").value = description;
+    modal.querySelector("#inGroupDisciplineEdit").value = inGroup ? "true" : "false";
+
+    const bootstrapModal = new bootstrap.Modal(modal);
+    bootstrapModal.show();
+};
+
+document.querySelector("#editDisciplinesButton").addEventListener("click", () => {
+    const id = document.querySelector("#idDisciplineEdit").value;
+    const name = document.querySelector("#nameDisciplineEdit").value;
+    const description = document.querySelector("#descriptionDisciplineEdit").value;
+    const inGroup = document.querySelector("#inGroupDisciplineEdit").value === "true";
+
+    const data = {
+        id: id,
+        name: name,
+        description: description,
+        inGroup: inGroup
+    };
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:8080/cornSchool_war_exploded/EditDiscipline", true);
+
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.message === "success") {
+                    alert("Discipline updated successfully.");
+                    readDisciplines();
+                    const modal = document.getElementById('updateDisciplinesModal');
+                    const bootstrapModal = new bootstrap.Modal(modal);
+                    bootstrapModal.hide();
+                } else {
+                    alert("Failed to update Discipline.");
+                }
+            } else {
+                alert("Error: " + xhr.status);
+            }
+        }
+    };
+
+    xhr.send(JSON.stringify(data));
+});
+
+const openDeleteDisciplineModal = (id) => {
+    document.querySelector("#deleteDisciplineId").value = id;
+    const modal = document.getElementById('deleteDescriptionModal');
+    let bootstrapModal = bootstrap.Modal.getInstance(modal);
+    if (!bootstrapModal) {
+        bootstrapModal = new bootstrap.Modal(modal);
+    }
+    bootstrapModal.show();
+}
+
+document.querySelector("#deleteDisciplineButton").addEventListener("click", () => {
+    const disciplineId = document.querySelector("#deleteDisciplineId").value;
+    const data = {
+        id: disciplineId
+    };
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:8080/cornSchool_war_exploded/DeleteDiscipline", true);
+
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    alert("Discipline deleted successfully.");
+                    readDisciplines();
+                    const bootstrapModal = new bootstrap.Modal(document.getElementById('deleteDescriptionModal'));
+                    bootstrapModal.hide();
+                } else {
+                    alert("Failed to delete Discipline.");
+                }
+            } else {
+                alert("Error: " + xhr.status);
+            }
+        }
+    };
+
+    xhr.send(JSON.stringify(data));
+
+})
 
 
 readDisciplines();
