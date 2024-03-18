@@ -259,7 +259,7 @@ document.querySelector("#deleteDisciplineButton").addEventListener("click", () =
                    ;
                     const modal = document.getElementById('deleteDescriptionModal');
                     const bootstrapModal = new bootstrap.Modal(modal);
-                    bootstrapModal.hide(); // Cerrar el modal aquí
+                    bootstrapModal.hide();
                 } else {
                     alert("Failed to delete Discipline: " + response.message);
                 }

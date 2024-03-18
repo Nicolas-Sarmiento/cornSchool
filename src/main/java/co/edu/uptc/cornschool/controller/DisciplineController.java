@@ -62,6 +62,8 @@ public class DisciplineController {
         if ( !validNumbers(id) ) return " Invalid Id( Only numbers )";
         if ( dao.findById(id) == null ) return "Discipline doesn't exists";
 
+
+
         return dao.delete(id) ? "Discipline deleted successfully" : "Something went wrong x(. Try again later!";
     }
 

@@ -1,6 +1,7 @@
 package co.edu.uptc.cornschool.servlets;
 
 import co.edu.uptc.cornschool.controller.DisciplineController;
+import co.edu.uptc.cornschool.controller.EventController;
 import co.edu.uptc.cornschool.controller.ParticipantsController;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -35,7 +36,12 @@ public class DeleteDiscipline extends HttpServlet {
         String id = jsonObject.get("id").getAsString();
 
         DisciplineController controller = new DisciplineController();
+
+        EventController eventController = new EventController();
+        eventController.removeDiscipline(id);
         String result = controller.delete(id);
+
+
 
         JsonObject responseJson = new JsonObject();
         responseJson.addProperty("message", result);
