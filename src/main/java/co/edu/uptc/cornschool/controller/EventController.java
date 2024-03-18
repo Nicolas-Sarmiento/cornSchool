@@ -154,6 +154,32 @@ public class EventController {
             }
 
         }
+    }
 
+    public void removeDiscipline( String id ){
+        Discipline removed = dao.getDisciplineDAO().findById(id);
+        if (removed == null){
+            return;
+        }
+        List<Event> allEvents = dao.read();
+        Discipline voidDiscipline = new Discipline("void", "No discipline", "No description", false);
+        dao.getDisciplineDAO().save(voidDiscipline);
+
+        Discipline disciplineReplacement = dao.getDisciplineDAO().findById("void");
+        for (Event event : allEvents ){
+
+            if ( event.getDiscipline().getId().compareTo(id) == 0){
+                event.setDiscipline(disciplineReplacement);
+                dao.update(event);
+            }
+        }
+
+        List<Participant> allParticipants = dao.getParticipants().readParticipants();
+        for (Participant p : allParticipants ){
+            if (p.getDiscipline().getId().compareTo(id) == 0){
+                p.setDiscipline(disciplineReplacement);
+                dao.getParticipants().editParticipant(p.getId(), p.getName(), p.getAge(), p.getGender(), p.getMail(), p.getWeight(), p.getHeight(), p.getDiscipline());
+            }
+        }
     }
 }

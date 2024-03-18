@@ -22,7 +22,6 @@ public class DisciplineDAO {
     private static final String URL = "mongodb://localhost:27017";
     private static final String DB = "collegue";
     private static final String COLLECTION = "disciplines";
-    private MongoClient mongoClient;
     public DisciplineDAO() {
     }
 
@@ -53,7 +52,11 @@ public class DisciplineDAO {
             ArrayList<Discipline> disciplines = new ArrayList<>();
             try {
                 while (docs.hasNext()){
-                    disciplines.add(this.docToObject(docs.next()));
+                    Document next = docs.next();
+                    if (next.getString("_id").compareTo("void") == 0){
+                        continue;
+                    }
+                    disciplines.add(this.docToObject(next));
                 }
             }finally {
                 docs.close();
