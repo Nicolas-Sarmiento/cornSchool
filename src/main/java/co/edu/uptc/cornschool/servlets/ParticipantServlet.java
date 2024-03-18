@@ -45,8 +45,8 @@ public class ParticipantServlet extends HttpServlet {
                     object.addProperty("height", participant.getHeight());
                     object.addProperty("weight", participant.getWeight());
 
-                    //String events = eventController.getParticipantEvent(participant.getId());
-                    object.addProperty("events", "events");
+                    String events = eventController.getParticipantEvent(participant.getId());
+                    object.addProperty("events", events);
 
                     array.add(object);
                 }

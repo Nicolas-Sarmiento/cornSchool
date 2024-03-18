@@ -203,14 +203,13 @@ document.getElementById("editDisciplinesButton").addEventListener("click", () =>
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
-                if (response.message === "success") {
+                if (response.message === "Discipline updated successfully") {
                     alert("Discipline updated successfully.");
                     readDisciplines();
-                    const modal = document.getElementById('updateDisciplinesModal');
-                    const bootstrapModal = new bootstrap.Modal(modal);
-                    bootstrapModal.hide();
+                    const modal = new bootstrap.Modal(document.getElementById('deleteDescriptionModal'));
+                    modal.hide();
                 } else {
-                    alert("Failed to update Discipline.");
+                    alert("Failed to update Discipline: " + response.message);
                 }
             } else {
                 alert("Error: " + xhr.status);
@@ -245,13 +244,14 @@ document.querySelector("#deleteDisciplineButton").addEventListener("click", () =
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
-                if (response.success) {
+                if (response.message === "Discipline deleted successfully") {
                     alert("Discipline deleted successfully.");
                     readDisciplines();
-                    const bootstrapModal = new bootstrap.Modal(document.getElementById('deleteDescriptionModal'));
-                    bootstrapModal.hide();
+                    const modal = document.getElementById('deleteDescriptionModal');
+                    const bootstrapModal = new bootstrap.Modal(modal);
+                    bootstrapModal.hide(); // Cerrar el modal aquí
                 } else {
-                    alert("Failed to delete Discipline.");
+                    alert("Failed to delete Discipline: " + response.message);
                 }
             } else {
                 alert("Error: " + xhr.status);
@@ -259,9 +259,9 @@ document.querySelector("#deleteDisciplineButton").addEventListener("click", () =
         }
     };
 
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.send(JSON.stringify(data));
-
-})
+});
 
 
 readDisciplines();
