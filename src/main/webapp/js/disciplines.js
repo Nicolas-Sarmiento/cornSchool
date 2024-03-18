@@ -172,8 +172,7 @@ document.querySelector("#addDisciplineButton").addEventListener("click", () => {
 })
 
 const openEditDisciplineModal = (id, name, description, inGroup) => {
-    const modal = document.getElementById('updateDisciplinesModal').cloneNode(true);
-
+    const modal = document.getElementById('updateDisciplinesModal');
 
     modal.querySelector("#idDisciplineEdit").value = id;
     modal.querySelector("#nameDisciplineEdit").value = name;
@@ -184,11 +183,11 @@ const openEditDisciplineModal = (id, name, description, inGroup) => {
     bootstrapModal.show();
 };
 
-document.querySelector("#editDisciplinesButton").addEventListener("click", () => {
-    const id = document.querySelector("#idDisciplineEdit").value;
-    const name = document.querySelector("#nameDisciplineEdit").value;
-    const description = document.querySelector("#descriptionDisciplineEdit").value;
-    const inGroup = document.querySelector("#inGroupDisciplineEdit").value === "true";
+document.getElementById("editDisciplinesButton").addEventListener("click", () => {
+    const id = document.getElementById("idDisciplineEdit").value;
+    const name = document.getElementById("nameDisciplineEdit").value;
+    const description = document.getElementById("descriptionDisciplineEdit").value;
+    const inGroup = document.getElementById("inGroupDisciplineEdit").value === "true";
 
     const data = {
         id: id,
@@ -219,6 +218,7 @@ document.querySelector("#editDisciplinesButton").addEventListener("click", () =>
         }
     };
 
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.send(JSON.stringify(data));
 });
 
