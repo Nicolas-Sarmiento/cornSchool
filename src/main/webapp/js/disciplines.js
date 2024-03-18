@@ -182,8 +182,7 @@ document.querySelector("#addDisciplineButton").addEventListener("click", () => {
 })
 
 const openEditDisciplineModal = (id, name, description, inGroup) => {
-    const modal = document.getElementById('updateDisciplinesModal').cloneNode(true);
-
+    const modal = document.getElementById('updateDisciplinesModal');
 
     modal.querySelector("#idDisciplineEdit").value = id;
     modal.querySelector("#nameDisciplineEdit").value = name;
@@ -194,11 +193,11 @@ const openEditDisciplineModal = (id, name, description, inGroup) => {
     bootstrapModal.show();
 };
 
-document.querySelector("#editDisciplinesButton").addEventListener("click", () => {
-    const id = document.querySelector("#idDisciplineEdit").value;
-    const name = document.querySelector("#nameDisciplineEdit").value;
-    const description = document.querySelector("#descriptionDisciplineEdit").value;
-    const inGroup = document.querySelector("#inGroupDisciplineEdit").value === "true";
+document.getElementById("editDisciplinesButton").addEventListener("click", () => {
+    const id = document.getElementById("idDisciplineEdit").value;
+    const name = document.getElementById("nameDisciplineEdit").value;
+    const description = document.getElementById("descriptionDisciplineEdit").value;
+    const inGroup = document.getElementById("inGroupDisciplineEdit").value === "true";
 
     const data = {
         id: id,
@@ -214,14 +213,13 @@ document.querySelector("#editDisciplinesButton").addEventListener("click", () =>
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
-                if (response.message === "success") {
+                if (response.message === "Discipline updated successfully") {
                     alert("Discipline updated successfully.");
                     readDisciplines();
-                    const modal = document.getElementById('updateDisciplinesModal');
-                    const bootstrapModal = new bootstrap.Modal(modal);
-                    bootstrapModal.hide();
+                    const modal = new bootstrap.Modal(document.getElementById('deleteDescriptionModal'));
+                    modal.hide();
                 } else {
-                    alert("Failed to update Discipline.");
+                    alert("Failed to update Discipline: " + response.message);
                 }
             } else {
                 alert("Error: " + xhr.status);
@@ -229,6 +227,7 @@ document.querySelector("#editDisciplinesButton").addEventListener("click", () =>
         }
     };
 
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.send(JSON.stringify(data));
 });
 
@@ -255,13 +254,14 @@ document.querySelector("#deleteDisciplineButton").addEventListener("click", () =
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
-                if (response.success) {
+                if (response.message === "Discipline deleted successfully") {
                     alert("Discipline deleted successfully.");
                     readDisciplines();
-                    const bootstrapModal = new bootstrap.Modal(document.getElementById('deleteDescriptionModal'));
-                    bootstrapModal.hide();
+                    const modal = document.getElementById('deleteDescriptionModal');
+                    const bootstrapModal = new bootstrap.Modal(modal);
+                    bootstrapModal.hide(); // Cerrar el modal aquí
                 } else {
-                    alert("Failed to delete Discipline.");
+                    alert("Failed to delete Discipline: " + response.message);
                 }
             } else {
                 alert("Error: " + xhr.status);
@@ -269,8 +269,8 @@ document.querySelector("#deleteDisciplineButton").addEventListener("click", () =
         }
     };
 
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.send(JSON.stringify(data));
-
-})
+});
 
 

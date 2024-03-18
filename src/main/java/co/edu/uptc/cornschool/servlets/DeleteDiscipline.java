@@ -33,15 +33,15 @@ public class DeleteDiscipline extends HttpServlet {
         JsonObject jsonObject = gson.fromJson(body.toString(), JsonObject.class);
 
         String id = jsonObject.get("id").getAsString();
-        System.out.println(id);
-        DisciplineController controller = new DisciplineController();
 
+        DisciplineController controller = new DisciplineController();
         String result = controller.delete(id);
 
         JsonObject responseJson = new JsonObject();
         responseJson.addProperty("message", result);
 
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         response.getWriter().write(responseJson.toString());
     }
 }

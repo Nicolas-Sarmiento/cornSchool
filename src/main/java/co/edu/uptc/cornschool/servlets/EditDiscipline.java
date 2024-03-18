@@ -43,6 +43,7 @@ public class EditDiscipline extends HttpServlet {
         responseJson.addProperty("message", result);
 
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         response.getWriter().write(responseJson.toString());
     }
 }
