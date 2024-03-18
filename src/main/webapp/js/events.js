@@ -1,5 +1,6 @@
 const renderEvents = () =>{
     xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://localhost:8080/cornSchool_war_exploded/event-servlet");
 
     xhr.onreadystatechange = () => {
         if (xhr.status === 200 && xhr.readyState === 4 ){
@@ -10,7 +11,6 @@ const renderEvents = () =>{
         }
     }
 
-    xhr.open("GET", "http://localhost:8080/cornSchool_war_exploded/event-servlet");
     xhr.send(null);
 }
 

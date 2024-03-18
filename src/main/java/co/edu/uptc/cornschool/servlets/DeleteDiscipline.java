@@ -37,16 +37,9 @@ public class DeleteDiscipline extends HttpServlet {
         DisciplineController controller = new DisciplineController();
 
         String result = controller.delete(id);
-        String message;
-
-        if (result.equals("Discipline deleted successfully")) {
-            message = "Discipline deleted successfully";
-        } else {
-            message = "Something went wrong x(. Try again later!";
-        }
 
         JsonObject responseJson = new JsonObject();
-        responseJson.addProperty("message", message);
+        responseJson.addProperty("message", result);
 
         response.setContentType("application/json");
         response.getWriter().write(responseJson.toString());

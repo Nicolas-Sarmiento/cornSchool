@@ -1,9 +1,15 @@
+document.addEventListener("DOMContentLoaded", () => {
+    readDisciplines();
+});
+
 const readDisciplines = () =>{
     xhr = new XMLHttpRequest();
 
+    xhr.open("GET", "http://localhost:8080/cornSchool_war_exploded/discipline-servlet");
     xhr.onreadystatechange = () => {
         if (xhr.status === 200 && xhr.readyState === 4 ){
             const response = JSON.parse(xhr.responseText);
+            console.log(response)
             if ( !response.status ) return;
             const data = JSON.parse(response.content);
             const container = document.getElementById("main");
@@ -14,7 +20,6 @@ const readDisciplines = () =>{
         }
     }
 
-    xhr.open("GET", "http://localhost:8080/cornSchool_war_exploded/discipline-servlet");
     xhr.send(null);
 }
 
@@ -126,6 +131,7 @@ const renderParticipants = ( participants ) => {
     return table;
 }
 
+
 document.querySelector("#addDisciplineButton").addEventListener("click", () => {
 
     const id = document.querySelector("#idDisciplineAdd").value;
@@ -149,7 +155,7 @@ document.querySelector("#addDisciplineButton").addEventListener("click", () => {
                 const response = JSON.parse(xhr.responseText);
                 if (response.success) {
                     alert("Discipline added successfully.");
-                    renderDiscipline()
+
 
                     const modal = document.getElementById('addDisciplineModal');
                     const bootstrapModal = bootstrap.Modal.getInstance(modal);
@@ -159,9 +165,13 @@ document.querySelector("#addDisciplineButton").addEventListener("click", () => {
                     document.querySelector("#nameDisciplineAdd").value = "";
                     document.querySelector("#descriptionDisciplineAdd").value = "";
                     document.querySelector("#inGroupDisciplineAdd").value = "";
+
+
                 } else {
                     alert(response.message);
+                    console.log("adfgahsd")
                 }
+                readDisciplines();
             } else {
                 alert("Error adding Discipline.");
             }
@@ -264,4 +274,3 @@ document.querySelector("#deleteDisciplineButton").addEventListener("click", () =
 })
 
 
-readDisciplines();
