@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
@@ -20,7 +21,8 @@ public class DeleteEvent extends HttpServlet {
         message = "Hello World!";
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         BufferedReader reader = request.getReader();
         StringBuilder body = new StringBuilder();
         String line;
@@ -39,7 +41,10 @@ public class DeleteEvent extends HttpServlet {
             EventController controller = new EventController();
             message = controller.delete(id);
 
-        }catch (Exception e) {
+            System.out.println("Message from controller: " + message);
+
+        } catch (Exception e) {
+            e.printStackTrace();
             message = "Something went wrong. Verify your info";
         }
         result.addProperty("message", message);

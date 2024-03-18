@@ -42,10 +42,6 @@ const renderEvent = ( id, name, description, date, discipline, participants) => 
     buttonEdit.appendChild(document.createTextNode("Edit"));
     buttonDelete.appendChild(document.createTextNode("Delete"));
 
-    buttonEdit.addEventListener("click", () => {
-        openEditDisciplineModal(id, name, description, date);
-    });
-
     buttonDelete.addEventListener("click", () => {
         openDeleteDisciplineModal(id)
     })
@@ -70,6 +66,14 @@ const renderEvent = ( id, name, description, date, discipline, participants) => 
 
     const divider = document.createElement("hr");
     divider.setAttribute("class", "hr-blurry");
+
+    openEditDisciplineModal
+
+    buttonEdit.addEventListener("click", () => {
+        const array = JSON.parse(participants);
+        const participantIds = array.map(participant => participant.id).join(",");
+        openEditDisciplineModal(id, name, description, date, discipline.id, participantIds);
+    });
 
     titleContent.appendChild(title);
     titleContent.appendChild(buttonEdit);
@@ -146,7 +150,7 @@ const loadDisciplines = () => {
                     select.appendChild(option);
                 });
 
-                const select2 = document.getElementById('disciplineSelectadd');
+                const select2 = document.getElementById('disciplineSelectedUpdate');
 
                 select2.innerHTML = '';
 
@@ -162,6 +166,153 @@ const loadDisciplines = () => {
     };
     xhr.send(null)
 }
+
+document.getElementById("addDisciplineButton").addEventListener("click", () => {
+    const id = document.getElementById("idDisciplineAdd").value;
+    const name = document.getElementById("nameDisciplineAdd").value;
+    const description = document.getElementById("descriptionDisciplineAdd").value;
+    const date = document.getElementById("dateDisciplineAdd").value;
+    const discipline = document.getElementById("disciplineParticipantSelect").value;
+    const participantsIds = document.getElementById("participantsIdAdd").value.split(",").map(id => id.trim());
+
+    const data = {
+        id: id,
+        name: name,
+        description: description,
+        date: date,
+        idDiscipline: discipline,
+        leaderboard: participantsIds
+    };
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:8080/cornSchool_war_exploded/AddEvent-servlet");
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                alert(response.message);
+
+                document.getElementById("idDisciplineAdd").value = "";
+                document.getElementById("nameDisciplineAdd").value = "";
+                document.getElementById("descriptionDisciplineAdd").value = "";
+                document.getElementById("dateDisciplineAdd").selectedIndex = 0;
+                document.getElementById("disciplineParticipantSelect").value = "";
+                document.getElementById("participantsIdAdd").value = "";
+            } else {
+                alert("La solicitud ha fallado");
+            }
+            readEvents()
+        }
+    };
+    xhr.send(JSON.stringify(data));
+});
+
+document.getElementById("editDisciplinesButton").addEventListener("click", () => {
+    const id = document.getElementById("idDisciplineUpdate").value;
+    const name = document.getElementById("nameDisciplineUpdate").value;
+    const description = document.getElementById("descriptionDisciplineUpdate").value;
+    const date = document.getElementById("dateDisciplineUpdate").value;
+    const discipline = document.getElementById("disciplineSelectedUpdate").value;
+    const participantsIds = document.getElementById("participantsIdUpdate").value.split(",").map(id => id.trim());
+
+    const data = {
+        id: id,
+        name: name,
+        description: description,
+        date: date,
+        idDiscipline: discipline,
+        leaderboard: participantsIds
+    };
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:8080/cornSchool_war_exploded/EditEvent-servlet");
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                alert(response.message);
+
+                document.getElementById("idDisciplineAdd").value = "";
+                document.getElementById("nameDisciplineAdd").value = "";
+                document.getElementById("descriptionDisciplineAdd").value = "";
+                document.getElementById("dateDisciplineAdd").selectedIndex = 0;
+                document.getElementById("disciplineParticipantSelect").value = "";
+                document.getElementById("participantsIdAdd").value = "";
+            } else {
+                alert("La solicitud ha fallado");
+            }
+            readEvents()
+        }
+    };
+    xhr.send(JSON.stringify(data));
+});
+
+const openEditDisciplineModal = (id, name, description, date, disciplineId, participantsId) => {
+    const modal = document.getElementById('updateDisciplinesModal');
+
+    const formattedDate = formatDate(date);
+
+
+    modal.querySelector("#idDisciplineUpdate").value = id;
+    modal.querySelector("#nameDisciplineUpdate").value = name;
+    modal.querySelector("#descriptionDisciplineUpdate").value = description;
+    modal.querySelector("#dateDisciplineUpdate").value = formattedDate;
+
+    loadDisciplines()
+
+    modal.querySelector("#disciplineSelectedUpdate").value = disciplineId;
+    modal.querySelector("#participantsIdUpdate").value = participantsId;
+
+    const bootstrapModal = new bootstrap.Modal(modal);
+    bootstrapModal.show();
+};
+
+const formatDate = (dateString) => {
+    const parts = dateString.split('-');
+    return `${parts[2]}-${parts[1]}-${parts[0]}`;
+};
+
+const openDeleteDisciplineModal = (id) => {
+    document.querySelector("#deleteDisciplineId").value = id;
+    const modal = document.getElementById('deleteDescriptionModal');
+    let bootstrapModal = bootstrap.Modal.getInstance(modal);
+    if (!bootstrapModal) {
+        bootstrapModal = new bootstrap.Modal(modal);
+    }
+    bootstrapModal.show();
+}
+
+document.querySelector("#deleteDisciplineButton").addEventListener("click", () => {
+    const disciplineId = document.querySelector("#deleteDisciplineId").value;
+    const data = {
+        id: disciplineId
+    };
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:8080/cornSchool_war_exploded/DeleteEvent-servlet", true);
+
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.message === "Discipline deleted successfully") {
+                    alert("Discipline deleted successfully.");
+                    bootstrapModal.hide();
+                } else {
+                    alert(response.message);
+                }
+                readEvents()
+            } else {
+                alert("Error: " + xhr.status);
+            }
+        }
+    };
+
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify(data));
+});
+
 
 
 // add and edit Request

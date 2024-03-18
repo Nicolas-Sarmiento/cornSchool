@@ -156,11 +156,6 @@ document.querySelector("#addDisciplineButton").addEventListener("click", () => {
                 if (response.success) {
                     alert("Discipline added successfully.");
 
-
-                    const modal = document.getElementById('addDisciplineModal');
-                    const bootstrapModal = bootstrap.Modal.getInstance(modal);
-                    bootstrapModal.hide();
-
                     document.querySelector("#idDisciplineAdd").value = "";
                     document.querySelector("#nameDisciplineAdd").value = "";
                     document.querySelector("#descriptionDisciplineAdd").value = "";
@@ -215,12 +210,10 @@ document.getElementById("editDisciplinesButton").addEventListener("click", () =>
                 const response = JSON.parse(xhr.responseText);
                 if (response.message === "Discipline updated successfully") {
                     alert("Discipline updated successfully.");
-                    readDisciplines();
-                    const modal = new bootstrap.Modal(document.getElementById('deleteDescriptionModal'));
-                    modal.hide();
                 } else {
                     alert("Failed to update Discipline: " + response.message);
                 }
+                readDisciplines()
             } else {
                 alert("Error: " + xhr.status);
             }
@@ -256,10 +249,6 @@ document.querySelector("#deleteDisciplineButton").addEventListener("click", () =
                 const response = JSON.parse(xhr.responseText);
                 if (response.message === "Discipline deleted successfully") {
                     alert("Discipline deleted successfully.");
-                   ;
-                    const modal = document.getElementById('deleteDescriptionModal');
-                    const bootstrapModal = new bootstrap.Modal(modal);
-                    bootstrapModal.hide(); // Cerrar el modal aquí
                 } else {
                     alert("Failed to delete Discipline: " + response.message);
                 }

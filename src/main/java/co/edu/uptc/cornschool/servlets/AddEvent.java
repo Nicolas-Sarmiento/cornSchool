@@ -33,13 +33,14 @@ public class AddEvent extends HttpServlet {
         JsonObject result = new JsonObject();
         String message = "";
         try {
+            System.out.println(body);
             JsonObject jsonObject = gson.fromJson(body.toString(), JsonObject.class);
 
             String id = jsonObject.get("id").getAsString();
             String name = jsonObject.get("name").getAsString();
             String description = jsonObject.get("description").getAsString();
             String date = jsonObject.get("date").getAsString();
-            String idDiscipline = jsonObject.get("discipline").getAsString();
+            String idDiscipline = jsonObject.get("idDiscipline").getAsString();
             List<String> leaderboard = new ArrayList<>();
             JsonArray leaderboardJson = jsonObject.get("leaderboard").getAsJsonArray();
             for (JsonElement element : leaderboardJson ) {

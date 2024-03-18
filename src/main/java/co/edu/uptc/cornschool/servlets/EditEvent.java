@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
@@ -20,7 +21,8 @@ public class EditEvent extends HttpServlet {
         message = "Hello World!";
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {
         BufferedReader reader = request.getReader();
         StringBuilder body = new StringBuilder();
         String line;
@@ -38,17 +40,17 @@ public class EditEvent extends HttpServlet {
             String name = jsonObject.get("name").getAsString();
             String description = jsonObject.get("description").getAsString();
             String date = jsonObject.get("date").getAsString();
-            String idDiscipline = jsonObject.get("discipline").getAsString();
+            String idDiscipline = jsonObject.get("idDiscipline").getAsString();
             List<String> leaderboard = new ArrayList<>();
             JsonArray leaderboardJson = jsonObject.get("leaderboard").getAsJsonArray();
-            for (JsonElement element : leaderboardJson ) {
+            for (JsonElement element : leaderboardJson) {
                 leaderboard.add(element.getAsString());
             }
 
             EventController controller = new EventController();
             message = controller.update(id, name, description, date, idDiscipline, leaderboard);
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             message = "Something went wrong. Verify your info";
         }
         result.addProperty("message", message);
@@ -57,5 +59,6 @@ public class EditEvent extends HttpServlet {
     }
 
     public void destroy() {
+
     }
 }
