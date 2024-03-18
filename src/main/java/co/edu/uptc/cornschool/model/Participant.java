@@ -94,12 +94,12 @@ public class Participant {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Participant that = (Participant) o;
-        return Double.compare(weight, that.weight) == 0 && Double.compare(height, that.height) == 0 && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(age, that.age) && Objects.equals(gender, that.gender) && Objects.equals(mail, that.mail);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(age, that.age) && Objects.equals(gender, that.gender) && Objects.equals(mail, that.mail);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, age, gender, mail, weight, height);
+        return Objects.hash(id, name, age, gender, mail);
     }
 
     @Override

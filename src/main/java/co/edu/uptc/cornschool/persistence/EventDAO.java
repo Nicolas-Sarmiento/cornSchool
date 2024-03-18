@@ -87,9 +87,10 @@ public class EventDAO {
             position = doc.getInteger("position");
 
             Participant aux = this.participants.findById(participantID);
-            if (aux == null ) return null;
+            if (aux != null ){
+                result.put(aux, position);
+            }
 
-            result.put(aux, position);
         }
         return result;
     }
@@ -138,7 +139,7 @@ public class EventDAO {
         for (Participant p : event.getLeaderboard().keySet()){
             documents.add(new Document()
                     .append("participant",p.getId())
-                    .append("postion", event.getLeaderboard().get(p))
+                    .append("position", event.getLeaderboard().get(p))
             );
         }
         return documents;

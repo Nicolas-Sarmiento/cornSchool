@@ -133,4 +133,27 @@ public class EventController {
 
         return eventsBuilder.toString();
     }
+
+    public void removeStudent( String id ){
+        List<Event> allEvents = dao.read();
+        Participant removed = dao.getParticipants().findById(id);
+
+        for (Event event : allEvents ){
+            Integer positionToDelete = event.getLeaderboard().remove(removed);
+
+            if (positionToDelete != null) {
+
+                for (Map.Entry<Participant, Integer> entry : event.getLeaderboard().entrySet()) {
+                    Integer currentPosition = entry.getValue();
+                    if (currentPosition > positionToDelete) {
+                        entry.setValue(currentPosition - 1);
+                    }
+                }
+
+                dao.update(event);
+            }
+
+        }
+
+    }
 }
