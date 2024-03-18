@@ -116,17 +116,21 @@ public class EventController {
         return dao.read();
     }
 
-    public HashMap<Event, Integer> getParticipantEvent(String id){
+    public String getParticipantEvent(String participantId) {
         List<Event> allEvents = dao.read();
-        HashMap<Event, Integer> events = new HashMap<>();
+        StringBuilder eventsBuilder = new StringBuilder();
 
-        for (Event e : allEvents ){
-            for (Participant p : e.getLeaderboard().keySet()){
-                if (p.getId().compareTo(id) == 0){
-                    events.put( e, e.getLeaderboard().get(p));
+        for (Event event : allEvents) {
+            for (Map.Entry<Participant, Integer> entry : event.getLeaderboard().entrySet()) {
+                Participant participant = entry.getKey();
+                Integer position = entry.getValue();
+                if (participant.getId().equals(participantId)) {
+                    eventsBuilder.append(event.getName()).append(": ").append(position).append("\n");
+                    eventsBuilder.append("\n");
                 }
             }
         }
-        return events;
+
+        return eventsBuilder.toString();
     }
 }

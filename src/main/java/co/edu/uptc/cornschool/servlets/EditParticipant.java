@@ -14,8 +14,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-@WebServlet(name = "DeleteParticipant", value = "/DeleteParticipant")
-public class DeleteParticipant extends HttpServlet {
+@WebServlet(name = "EditParticipant", value = "/EditParticipant")
+public class EditParticipant extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,18 +30,27 @@ public class DeleteParticipant extends HttpServlet {
         JsonObject jsonObject = gson.fromJson(body.toString(), JsonObject.class);
 
         String id = jsonObject.get("id").getAsString();
+        String name = jsonObject.get("name").getAsString();
+        int age = jsonObject.get("age").getAsInt();
+        boolean gender = jsonObject.get("gender").getAsBoolean();
+        String mail = jsonObject.get("mail").getAsString();
+        double weight = jsonObject.get("weight").getAsDouble();
+        double height = jsonObject.get("height").getAsDouble();
+        String disciplineId = jsonObject.get("discipline").getAsString();
 
+        DisciplineController disciplineController = new DisciplineController();
+        Discipline discipline = disciplineController.findById(disciplineId);
 
 
         ParticipantsController controller = new ParticipantsController();
-        boolean success = controller.deleteParticipant(id);
+        boolean success = controller.editParticipant(id,name,age,gender,mail,weight,height,discipline);
 
         JsonObject responseJson = new JsonObject();
         responseJson.addProperty("success", success);
         if (success) {
-            responseJson.addProperty("message", "Participant deleted successfully");
+            responseJson.addProperty("message", "Participant edited successfully");
         } else {
-            responseJson.addProperty("message", "Failed to delete participant");
+            responseJson.addProperty("message", "Failed to edit participant");
         }
 
         response.setContentType("application/json");

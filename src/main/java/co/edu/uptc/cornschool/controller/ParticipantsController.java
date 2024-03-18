@@ -23,11 +23,8 @@ import static com.mongodb.client.model.Filters.eq;
 public class ParticipantsController {
 
 
-    String uri = "mongodb+srv://amongus4:mongus444@conrschool.evfn33h.mongodb.net/?retryWrites=true&w=majority&appName=ConrSchool";
-
-    //String uri = "<mongodb+srv://amongus4:amongus4 @conrschool.evfn33h.mongodb.net/?retryWrites=true&w=majority&appName=ConrSchool>";
     //String uri = "mongodb+srv://amongus4:mongus444@conrschool.evfn33h.mongodb.net/?retryWrites=true&w=majority&appName=ConrSchool";
-    //private static final String uri = "mongodb://localhost:27017";
+    private static final String uri = "mongodb://localhost:27017";
 
     public ArrayList<Participant> readParticipants() {
         DisciplineController controller = new DisciplineController();

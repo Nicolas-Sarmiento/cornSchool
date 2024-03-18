@@ -77,27 +77,31 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>id</p>
-                    <input type="text">
+                    <p>Participant ID to edit"</p>
+                    <input type="text" id="idParticipantUpdate">
+                    <p>name</p>
+                    <input type="text" id="nameParticipantUpdate">
+                    <p>age</p>
+                    <input type="number" id="ageParticipantUpdate">
                     <p>gender</p>
-                    <select id="genderSelect">
-                        <option value="male">Hombre</option>
-                        <option value="female">Mujer</option>
+                    <select id="genderParticipantSelect">
+                        <option value="true">Hombre</option>
+                        <option value="false">Mujer</option>
                     </select>
                     <p>mail</p>
-                    <input type="text">
+                    <input type="text" id="mailParticipantUpdate">
                     <p>weight</p>
-                    <input type="number">
+                    <input type="number" id="weightParticipantUpdate">
                     <p>height</p>
-                    <input type="number">
+                    <input type="number" id="heightParticipantUpdate">
                     <p>Discipline</p>
-                    <select id="disciplineSelect">
+                    <select id="disciplineParticipantSelect">
                         <!-- disciplines generate in javascript -->
                     </select>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary" id="updateParticipant">Save changes</button>
                 </div>
             </div>
         </div>
@@ -115,7 +119,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary", id="deleteParticipant">delete</button>
+                    <button type="button" class="btn btn-primary" id="deleteParticipant">delete</button>
                 </div>
             </div>
         </div>

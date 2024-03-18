@@ -1,6 +1,8 @@
 package co.edu.uptc.cornschool.servlets;
 
+import co.edu.uptc.cornschool.controller.EventController;
 import co.edu.uptc.cornschool.controller.ParticipantsController;
+import co.edu.uptc.cornschool.model.Event;
 import co.edu.uptc.cornschool.model.Participant;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -12,6 +14,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet(name = "ParticipantServlet", value = "/ParticipantServlet")
 public class ParticipantServlet extends HttpServlet {
@@ -20,6 +24,7 @@ public class ParticipantServlet extends HttpServlet {
         response.setContentType("application/json");
 
         ParticipantsController controller = new ParticipantsController();
+        EventController eventController = new EventController();
         Gson gson = new Gson();
 
         ArrayList<Participant> participants = new ArrayList<>();
@@ -35,9 +40,14 @@ public class ParticipantServlet extends HttpServlet {
                     object.addProperty("age", participant.getAge());
                     object.addProperty("gender", participant.getGender());
                     object.addProperty("discipline", participant.getDiscipline().getName());
+                    object.addProperty("disciplineId", participant.getDiscipline().getId());
                     object.addProperty("mail", participant.getMail());
                     object.addProperty("height", participant.getHeight());
                     object.addProperty("weight", participant.getWeight());
+
+                    String events = eventController.getParticipantEvent(participant.getId());
+                    object.addProperty("events", events);
+
                     array.add(object);
                 }
                 response.getWriter().write( gson.toJson(array) );

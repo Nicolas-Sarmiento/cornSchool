@@ -30,8 +30,6 @@ public class AddParticipant extends HttpServlet {
             body.append(line);
         }
 
-        System.out.println( body.toString() );
-
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(body.toString(), JsonObject.class);
 
