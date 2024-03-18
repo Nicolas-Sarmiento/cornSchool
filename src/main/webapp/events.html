@@ -23,9 +23,9 @@
         </div>
     </nav>
 
-    <h2>Disciplines</h2>
+    <h2>Events</h2>
     <br>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDisciplineModal">New discipline</button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDisciplineModal">New event</button>
     <div class="container'-fluid" id="main"></div>
 
 
@@ -43,11 +43,10 @@
                     <input type="text" id="nameDisciplineAdd">
                     <p>Description</p>
                     <input type="text" id="descriptionDisciplineAdd">
-                    <p>InGroup</p>
-                    <select id="inGroupDisciplineAdd">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
+                    <p>Discipline</p>
+                    <select id="disciplineParticipantSelect"></select>
+                    <p>Number of participants</p>
+                    <input type="number" id="participantsNumberSelect">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

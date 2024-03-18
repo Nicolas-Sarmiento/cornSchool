@@ -169,7 +169,7 @@ document.querySelector("#addDisciplineButton").addEventListener("click", () => {
 
                 } else {
                     alert(response.message);
-                    console.log("adfgahsd")
+
                 }
                 readDisciplines();
             } else {
@@ -256,13 +256,14 @@ document.querySelector("#deleteDisciplineButton").addEventListener("click", () =
                 const response = JSON.parse(xhr.responseText);
                 if (response.message === "Discipline deleted successfully") {
                     alert("Discipline deleted successfully.");
-                    readDisciplines();
+                   ;
                     const modal = document.getElementById('deleteDescriptionModal');
                     const bootstrapModal = new bootstrap.Modal(modal);
                     bootstrapModal.hide(); // Cerrar el modal aquí
                 } else {
                     alert("Failed to delete Discipline: " + response.message);
                 }
+                readDisciplines();
             } else {
                 alert("Error: " + xhr.status);
             }
