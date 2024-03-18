@@ -23,31 +23,31 @@ public class EventController {
 
     public String save(String id, String name, String description, String date, String idDiscipline, List<String> participantsId){
         if ( !validateEvent(id, name,description, date,idDiscipline, participantsId)){
-            return "No se pudo guardar el evento. " + this.returnMessage;
+            return "Event can't be saved. " + this.returnMessage;
         }
-        if (this.dao.findById(id) != null ) return "No se pudo guardar el evento. Evento existente";
+        if (this.dao.findById(id) != null ) return "Event can't be saved. . Event exists!";
 
         Event eventToAdd = this.convertEvent(id, name, description,date,idDiscipline, participantsId);
         boolean result = this.dao.save(eventToAdd);
-        return result? "Evento guardado exitosamente" : "Algo salió mal. Intentalo más tarde";
+        return result? "Event saved successfully" : "Something went wrong x(. Try again later!";
     }
 
     public String update(String id, String name, String description, String date, String idDiscipline, List<String> participantsId){
         if ( !validateEvent(id, name,description, date,idDiscipline, participantsId)){
-            return "No se pudo guardar el evento. " + this.returnMessage;
+            return "Event can't be updated. " + this.returnMessage;
         }
-        if (this.dao.findById(id) == null ) return "No se pudo actualizar el evento. Evento no existente";
+        if (this.dao.findById(id) == null ) return "Event can't be updated. Event doesn't exist";
 
         Event eventToAdd = this.convertEvent(id, name, description,date,idDiscipline, participantsId);
         boolean result = this.dao.update(eventToAdd);
-        return result? "Evento actualizado exitosamente" : "No se actualizó ningun evento";
+        return result? "Event updated successfully" : "Something went wrong x(. Try again later!";
     }
 
     public String delete(String id){
-        if (!validNumbers(id) ) return "El id no es válido ( Solo números )";
-        if ( dao.findById(id) == null ) return "Evento no existente";
+        if (!validNumbers(id) ) return "Invalid id ( only numbers )";
+        if ( dao.findById(id) == null ) return "Event doesn't exist";
 
-        return dao.delete(id) ? "Evento eliminado exitosamente" : "Algo salió mal. Intentalo más tarde";
+        return dao.delete(id) ? "Event deleted succesffully" : "Something went wrong x(. Try again later!";
     }
 
     private boolean validateInput( String st ) {
@@ -64,29 +64,29 @@ public class EventController {
 
     private boolean validateEvent(String id, String name, String description, String date, String idDiscipline, List<String> participantsId){
         if (!validNumbers(id)){
-            this.returnMessage = "El id no cumple con los estandares ( Solo números )";
+            this.returnMessage = "Invalid id ( only numbers )";
             return false;
         }
         if (!validateInput(name)){
-            this.returnMessage = "El nombre contiene caracteres no válidos";
+            this.returnMessage = "Invalid name";
             return false;
         }
         if (!validateInput(description)){
-            this.returnMessage = "La descripción contiene caracteres no válidos";
+            this.returnMessage = "Description contains invalid characters";
         }
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         try {
             auxDate = format.parse(date);
         }catch (ParseException e) {
-            this.returnMessage = "La fecha del evento ingresada no es válida.";
+            this.returnMessage = "Invalid date";
             return false;
         }
         if (this.dao.getDisciplineDAO().findById(idDiscipline) == null){
-            this.returnMessage = "La disciplina ingresada no existe.";
+            this.returnMessage = "Discpline doesn't exist.";
             return false;
         }
         if (!validateLeaderboard(participantsId)){
-            this.returnMessage = "La lista de participantes contiene repetidos o participantes no existentes";
+            this.returnMessage = "The leaderboard contains usert that doesn't exist or it contains duplicated users";
             return false;
         }
         return true;
